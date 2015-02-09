@@ -1,5 +1,5 @@
 <%@ page
- contentType="text/html;charset=gbk"
+ contentType="text/html;charset=utf-8"
  import="java.io.*,javax.servlet.*,util.*,db.*,java.util.*"
  %>
  <%
@@ -17,5 +17,5 @@
       s=DB.getOrderDet(2);
    }
    String msg=DB.getDetail(param1);
-   out.println(MyConverter.escape("¼ò½é£º"+msg+"|Ô¤¶¨¹æÔò:"+s));  
+   out.println(MyConverter.escape("ç®€ä»‹ï¼š"+msg+"|é¢„å®šè§„åˆ™:"+s));  
  %>
