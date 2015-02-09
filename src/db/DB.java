@@ -233,6 +233,30 @@ public class DB {
 			finally {DB.closeCon();}//关闭数据库连接 		
 			return changedCount;//返回跟新记录条数
 		}
+		public static boolean updatea(String sqla)//返回是否更新成功的更新语句
+		{
+			boolean b=false;
+			try{
+				String sql = sqla;//转码
+				con = DB.getCon();//得到数据库连接
+				con.setAutoCommit(false);//禁止自动提交，开始一个事务
+				stat = con.createStatement();//创建语句对象
+				stat.executeUpdate(sql);//进行更新
+				con.commit();//将事务提交			
+				con.setAutoCommit(true);//恢复自动提交模式
+				b = true;//设置更新成功
+			}
+			catch(Exception e){
+				e.printStackTrace();
+				try{
+					con.rollback();//出现问题，事务回滚
+					b = false;
+				}
+				catch(Exception ea){ea.printStackTrace();}
+			}
+			finally{DB.closeCon();}//关闭数据库连接
+			return b;//返回更新成功或者失败标志
+		}
 		public static boolean update(String sqla,String sqlb){//事务处理
 			boolean b = false;//记录是否更新成功
 			try{
@@ -286,6 +310,28 @@ public class DB {
 			return v;//返回查询结果
 		}
 		
+		//***********************得到用户的详细信息********************************
+		public static Vector<String> getUserInfo(String uname1){
+			Vector<String> userInfo=new Vector<String>();
+			try{
+				String uname = uname1;//转码
+				con = DB.getCon();//得到数据库连接
+				stat = con.createStatement();//创建语句对象
+				rs = stat.executeQuery("select pwd,telNum,realName,gender,"+
+										"email from user where uname='"+uname+"'");
+				if(rs.next()){//将用户信息添加到向量中
+				    userInfo.add(rs.getString(1));
+					userInfo.add(rs.getString(2));
+					userInfo.add(rs.getString(3));
+					userInfo.add(rs.getString(4));
+					userInfo.add(rs.getString(5));
+				}
+			}
+			catch(Exception e) {e.printStackTrace();}
+			finally	{DB.closeCon();}//关闭数据库连接		
+			return userInfo;//返回用户信息
+		}
+		
 		//*****************得到管理员详细信息********************************
 		public static Vector<String[]> getAdminInfo(){
 			Vector<String[]> v = new Vector<String[]>();
@@ -307,6 +353,7 @@ public class DB {
 			finally{DB.closeCon();}		
 			return v;
 		}
+		//根据资源的规格查询资源信息.返回资源列表(资源的组id,资源规格,资源价位,资源状态)
 		public static Vector<String[]> getResource(String rlevel)
 		{
 			Vector<String[]> v=new Vector<String[]>();
@@ -365,5 +412,53 @@ public class DB {
 				DB.closeCon();
 			}
 			return  v;
+		}
+		public static String getOrderDet(int gId)
+		{
+			String msg="";
+			try
+			{
+				con=DB.getCon();
+				stat=con.createStatement();
+				String sql="select gOrderDet from rgroup where gId="+gId;
+				rs=stat.executeQuery(sql);
+				if(rs.next())
+				{
+					msg=rs.getString(1);
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				DB.closeCon();
+			}
+			return msg;
+		}
+		public static String getDetail(String rgid)
+		{
+			String s=null;
+			try
+			{
+				String sql="select rdetail from resource where rgid="+rgid;
+				con=DB.getCon();
+				stat=con.createStatement();
+				rs=stat.executeQuery(sql);
+				if(rs.next())
+				{
+					s=rs.getString(1);
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			finally
+			{
+				DB.closeCon();
+			}
+			return s;
 		}
 }

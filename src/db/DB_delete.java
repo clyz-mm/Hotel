@@ -13,9 +13,6 @@ public class DB_delete{
 			oid = oid;
 		    con = DB.getCon();
 		    stat = con.createStatement();
-		    //rs = stat.executeQuery("select orid from oinfo where rgid='"+rid+"'");
-		    //if(rs.next())
-			//{orid=rs.getString(1).getBytes("iso8859-1"),"gbk");}
 			System.out.println(oid);
 			String sqla="delete from olist where oid="+oid;
 			String sqlb="delete from oinfo where orid="+oid;

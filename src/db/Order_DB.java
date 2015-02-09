@@ -67,46 +67,7 @@ public class Order_DB{
 		}	
 		return da;//返回日期对象
 	}
-/*	public static int addOrder(String user,Vector<String[]> OrderList)
-	{
-		int i = 0;
-		int orid = DB.getId("oinfo","orid");//得到订单明细的主键ID+1值
-		int oid = DB.getId("olist","oid");//得到订单表的主键ID+1值
-		try{			
-			con = DB.getCon();
-			stat = con.createStatement();
-			//得到相关信息组成订单			
-			java.util.Date d = new java.util.Date();
-			String otime = d.toLocaleString();
-			con.setAutoCommit(false);//禁用自动提交，开始一个事务
-			String sqla = "insert into olist(oid,oname,otime) values"+
-					"("+oid+",'"+user+"','"+otime+"')";
-			String sql = sqla;			
-			stat.executeUpdate(sql);
-			//得到订单明细信息
-			Vector<String> sqlb = new Vector<String>();			
-			for(String []s:OrderList){												
-				String rgid = s[0];//得到所订资源号
-				//得到开始和结束时间
-				String ftime = s[2]; String etime = s[3];
-				String sqlc = "insert into oinfo(orid,oid,rgid,ftime,etime) values"+
-						"("+orid+","+oid+",'"+rgid+"','"+ftime+"','"+etime+"')";
-				String sqld = sqlc;
-				stat.executeUpdate(sqld);//执行更新
-				orid++;//主键自加，作为下一条记录的主键
-			}
-			con.commit();//将事务提交
-			con.setAutoCommit(true);//恢复自动提交模式
-		}
-		catch(Exception e){
-			e.printStackTrace();
-			i = -1;
-			try{con.rollback();}//出现错误，发起回滚操作
-			catch(Exception ea)	{e.printStackTrace();}
-		}
-		finally	{DB.closeCon();}
-		return i;//返回执行结果,-1代表失败
-	}*/
+	//根据用户提交的信息(用户名,预定房间,起始日期，结束日期)添加订单和订单明细信息
 		public static int addOrder(String user,Vector<String[]> OrderList)
 	{
 		int i = 0;
@@ -168,6 +129,7 @@ public class Order_DB{
 		finally	{DB.closeCon();}
 		return v;
 	}
+	//根据订单号查询.订单的(房间号,开始结束时间,预定状态,分组名)
 	public static Vector<String []> getOrderDetail(String oid){//得到某一订单详情
 		Vector<String []> v = new Vector<String[]>();
 		try{

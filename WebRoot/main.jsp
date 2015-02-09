@@ -10,6 +10,7 @@
     for(String[]s:v)
     {
        msg+=s[0]+"|"+s[2]+"|";
+       //获得分组名和分组描述
     }
     out.println(MyConverter.escape(msg));
     //System.out.println(MyConverter.escape(msg));
